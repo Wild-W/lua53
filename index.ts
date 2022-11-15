@@ -13,7 +13,7 @@ type LuaLib = "base"|"bit32"|"coroutine"|"debug"|"io"|"math"|"os"|"package"|"str
 
 class LuaState
 {
-    private state: any;
+    private state: External;
 
     constructor() { this.state = rsBind.luaNew(); }
 

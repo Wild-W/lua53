@@ -17,12 +17,19 @@ class LuaState
 
     constructor() { this.state = rsBind.luaNew(); }
 
-    openLibs(libs?: LuaLib[])
+    loadLibs(libs?: LuaLib[])
     {
         if (libs) rsBind.luaOpenLibs.call(this.state, libs);
         else rsBind.luaOpenLibs.call(this.state);
     }
-    openLib(lib: LuaLib) { rsBind.luaOpenLib.call(this.state, lib); }
+    loadLib(lib: LuaLib) { rsBind.luaOpenLib.call(this.state, lib); }
+
+    getTop(): number { return rsBind.luaGetTop.call(this.state); }
+    //getGlobal(name: string): any { return rsBind.luaGetGlobal.call(this.state, name); }
+
+    pushNumber(num: number) { rsBind.luaPushNumber.call(this.state, num); }
+    setGlobal(name: string) { rsBind.luaSetGlobal.call(this.state, name); }
+    createGlobal(name: string, value: string|number|boolean) { rsBind.luaCreateGlobal.call(this.state, name, value); }
 
     doString(code: string) { rsBind.luaDoString.call(this.state, code); }
     doFile(file: string) { rsBind.luaDoFile.call(this.state, file); }
@@ -39,6 +46,12 @@ const luaSafe = [
     "table",
     "utf-8"
 ];
+
+let testState = new LuaState();
+testState.loadLibs();
+testState.createGlobal("test", 600);
+testState.doString("print(test)");
+//testState.getGlobal("test");
 
 export {
     LuaState,
